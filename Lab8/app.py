@@ -1,6 +1,7 @@
 # app.py
 from flask import Flask, render_template
 from data_structures import db, login_manager  # extensions
+from mock_data import mockData
 from routes import auth_bp
 
 def create_app():
@@ -13,6 +14,7 @@ def create_app():
 
     db.init_app(app)
     login_manager.init_app(app)
+    login_manager.login_view = "auth.login"
 
 
     app.register_blueprint(auth_bp)
@@ -28,6 +30,7 @@ def create_app():
 
     with app.app_context():
         db.create_all()
+        mockData()
 
     return app
 
