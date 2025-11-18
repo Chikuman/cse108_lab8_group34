@@ -25,9 +25,13 @@ class Student(db.Model):
     student_id = db.Column(db.Integer, primary_key = True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), unique=True)
 
+    user = db.relationship('User')
+
 class Teacher(db.Model):
     teacher_id = db.Column(db.Integer, primary_key = True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), unique=True)
+
+    user = db.relationship('User')
 
 class Class(db.Model):
     class_id = db.Column(db.Integer, primary_key = True)
@@ -35,6 +39,9 @@ class Class(db.Model):
     class_time = db.Column(db.String(50), nullable = False)
     class_capacity = db.Column(db.Integer, nullable = False)
     teacher_id = db.Column(db.Integer, db.ForeignKey('teacher.teacher_id'))
+
+    teacher = db.relationship('Teacher', backref='classes')
+    enrollments = db.relationship("Enrollment", backref="class")
 
 class Enrollment(db.Model):
     enrollment_id = db.Column(db.Integer, primary_key=True)
