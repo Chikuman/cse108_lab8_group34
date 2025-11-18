@@ -7,8 +7,8 @@
 
   <div id="student-section">
     <div style="margin-bottom: 20px;">
-      <button onclick="showTab('current')">Your Classes</button>
-      <button onclick="showTab('add')">Add Classes</button>
+      <button onclick="studentShowTab('current')">Your Classes</button>
+      <button onclick="studentShowTab('add')">Add Classes</button>
     </div>
   
     <div id="current-classes">
@@ -85,7 +85,11 @@
           <tbody>
               {% for c in teacherClasses %}
                   <tr>
-                      <td>{{ c.class_name }}</td>
+                      <td>
+                        <a href="#" onclick="loadClassDetails('{{ c.class_id }}')">
+                          {{ c.class_name }}
+                        </a>
+                      </td>
                       <td>{{ c.teacher.user.username }}</td>
                       <td>{{ c.class_time }}</td>
                       <td>{{ c.enrollments|length }}/{{ c.class_capacity }}</td>
@@ -93,6 +97,10 @@
               {% endfor %}
           </tbody>
       </table>
+    </div>
+
+    <div id="class-details" style="display: block;">
+      
     </div>
   </div>
 

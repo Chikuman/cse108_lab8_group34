@@ -45,8 +45,6 @@ def create_app():
             db.session.query(Class)
             .all()
         )
-        print("Current user:", current_user.id)
-        print("Student row:", student)
 
         return render_template(
             "index.html",
@@ -83,6 +81,43 @@ def create_app():
         db.create_all()
         # add mock data to database (delete app.db if mockData is updated to refresh database)
         mockData()
+
+    @app.route("/class/<int:class_id>/students")
+    @login_required
+    def class_students(class_id):
+        enrollments = Enrollment.query.filter_by(class_id=class_id).all()
+
+        results = []
+        for e in enrollments:
+            student = Student.query.get(e.student_id)
+            user = User.query.get(student.user_id)
+
+            results.append({
+                "name": user.username,
+                "grade": e.grade,
+                "enrollment_id": e.enrollment_id
+            })
+
+        return jsonify(results)
+    
+    @app.route("/update-grade", methods=["POST"])
+    @login_required
+    def update_grade():
+        data = request.get_json()
+        enrollment_id = data["enrollment_id"]
+        new_grade = data["grade"]
+
+        enrollment = Enrollment.query.get(enrollment_id)
+        if not enrollment:
+            return jsonify({"status": "error", "message": "Enrollment not found"}), 404
+
+        enrollment.grade = new_grade
+        db.session.commit()
+
+        return jsonify({
+            "status": "success",
+            "class_id": enrollment.class_id
+        })
 
     return app
 
