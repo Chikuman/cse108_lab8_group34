@@ -8,36 +8,54 @@ db = SQLAlchemy()
 login_manager = LoginManager()
 login_manager.login_view = "auth.login"
 
-
-
-class Student(db.Model):
-    student_id = db.Column(db.Integer, primary_key = True)
-    student_name = db.Column(db.String(50), nullable = False)
-    def __repr(self):
-        return '<Student %r>' % self.id
-
-class Class(db.Model):
-    class_id = db.Column(db.Integer, primary_key = True)
-    class_name = db.Column(db.String(70), nullable = False)
-    class_instructor = db.Column(db.String(50), nullable = False)
-    class_time = db.Column(db.String(50), nullable = False)
-    class_capacity = db.Column(db.Integer, nullable = False)
-
-    def __repr(self):
-        return '<Class %r>' % self.id
-
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key = True)
     username = db.Column(db.String, unique = True, nullable = False)
     password = db.Column(db.String, nullable = False)
 
+    is_admin = db.Column(db.Boolean, default=False, nullable=False)
+                         
     def set_password(self, password):
         self.password = password
     def check_password(self, password):
         return self.password == password
-
+    
     def __repr(self):
         return '<User %r>' % self.id
+
+class Student(db.Model):
+    student_id = db.Column(db.Integer, primary_key = True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), unique=True)
+
+    user = db.relationship('User')
+
+class Teacher(db.Model):
+    teacher_id = db.Column(db.Integer, primary_key = True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), unique=True)
+
+    user = db.relationship('User')
+
+class Class(db.Model):
+    class_id = db.Column(db.Integer, primary_key = True)
+    class_name = db.Column(db.String(70), nullable = False)
+    class_time = db.Column(db.String(50), nullable = False)
+    class_capacity = db.Column(db.Integer, nullable = False)
+    teacher_id = db.Column(db.Integer, db.ForeignKey('teacher.teacher_id'))
+
+    teacher = db.relationship('Teacher', backref='classes')
+    enrollments = db.relationship("Enrollment", backref="class")
+
+class Enrollment(db.Model):
+    enrollment_id = db.Column(db.Integer, primary_key=True)
+    student_id = db.Column(db.Integer, db.ForeignKey('student.student_id'))
+    class_id = db.Column(db.Integer, db.ForeignKey('class.class_id'))
+    grade = db.Column(db.String(5), nullable=True)
+
+    student = db.relationship("Student", backref="enrollments")
+    __table_args__ = (
+        db.UniqueConstraint('student_id', 'class_id', name='unique_enrollment'),
+    )
+
 
 @login_manager.user_loader
 def load_user(user_id):
