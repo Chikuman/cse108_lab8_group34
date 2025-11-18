@@ -22,3 +22,13 @@ function toggleClass(classId) {
     })
     .catch(err => console.error("Error:", err));
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+    if (USER_ROLE === "student") {
+        document.getElementById("student-section").style.display = "block";
+        document.getElementById("teacher-section").style.display = "none";
+    } else {
+        document.getElementById("student-section").style.display = "none";
+        document.getElementById("teacher-section").style.display = "block";
+    }
+});

@@ -28,19 +28,33 @@ def create_app():
     @app.route("/index")
     def index():
         student = Student.query.filter_by(user_id=current_user.id).first()
+        teacher = Teacher.query.filter_by(user_id=current_user.id).first()
 
-        classes = (
+        role = "student" if student else "teacher"
+
+        studentClasses = (
             db.session.query(Class)
             .join(Enrollment, Enrollment.class_id == Class.class_id)
             .filter(Enrollment.student_id == student.student_id)
             .all()
-        )
+        ) if student else []
+
+        teacherClasses = Class.query.filter_by(teacher_id=teacher.teacher_id).all() if teacher else []
+
         allClasses = (
             db.session.query(Class)
             .all()
         )
+        print("Current user:", current_user.id)
+        print("Student row:", student)
 
-        return render_template("index.html", classes=classes, allClasses=allClasses)
+        return render_template(
+            "index.html",
+            role=role,
+            studentClasses=studentClasses,
+            teacherClasses=teacherClasses,
+            allClasses=allClasses
+        )
     
     @app.route("/toggle_class", methods=["POST"])
     def toggle_class():

@@ -47,6 +47,7 @@ class Enrollment(db.Model):
     enrollment_id = db.Column(db.Integer, primary_key=True)
     student_id = db.Column(db.Integer, db.ForeignKey('student.student_id'))
     class_id = db.Column(db.Integer, db.ForeignKey('class.class_id'))
+    grade = db.Column(db.Integer, nullable = False)
 
     __table_args__ = (
         db.UniqueConstraint('student_id', 'class_id', name='unique_enrollment'),

@@ -3,70 +3,103 @@
 {% block body %}
   <h1>Dashboard</h1>
   <p>Welcome, {{ current_user.username }}.</p>
+  <p>{{role}}</p>
 
-  <div style="margin-bottom: 20px;">
-    <button onclick="showTab('current')">Your Classes</button>
-    <button onclick="showTab('add')">Add Classes</button>
+  <div id="student-section">
+    <div style="margin-bottom: 20px;">
+      <button onclick="showTab('current')">Your Classes</button>
+      <button onclick="showTab('add')">Add Classes</button>
+    </div>
+  
+    <div id="current-classes">
+      <table border="1" cellspacing="0" cellpadding="8">
+          <thead>
+              <tr>
+                  <th>Class Name</th>
+                  <th>Teacher</th>
+                  <th>Time</th>
+                  <th>Enrollment</th>
+              </tr>
+          </thead>
+          <tbody>
+              {% for c in studentClasses %}
+              <tr>
+                  <td>{{ c.class_name }}</td>
+                  <td>{{ c.teacher.user.username }}</td>
+                  <td>{{ c.class_time }}</td>
+                  <td>
+                      {{ c.enrollments|length }}/{{ c.class_capacity }}
+                  </td>
+              </tr>
+              {% endfor %}
+          </tbody>
+      </table>
+    </div>
+
+    <div id="add-classes" style="display:none;">
+      <table border="1" cellspacing="0" cellpadding="8">
+          <thead>
+              <tr>
+                  <th>Class Name</th>
+                  <th>Teacher</th>
+                  <th>Time</th>
+                  <th>Enrollment</th>
+                  <th>Add/Drop</th>
+              </tr>
+          </thead>
+          <tbody>
+              {% for c in allClasses %}
+              <tr>
+                  <td>{{ c.class_name }}</td>
+                  <td>{{ c.teacher.user.username }}</td>
+                  <td>{{ c.class_time }}</td>
+                  <td>{{ c.enrollments|length }}/{{ c.class_capacity }}</td>
+                  <td>
+                    <button onclick="toggleClass('{{ c.class_id }}')">
+                      {% if c in classes %}
+                        -
+                      {% else %}
+                        +
+                      {% endif %}
+                    </button>
+                  </td>
+              </tr>
+              {% endfor %}
+          </tbody>
+      </table>
+    </div>
   </div>
 
-  <div id="current-classes">
-    <table border="1" cellspacing="0" cellpadding="8">
-        <thead>
-            <tr>
-                <th>Class Name</th>
-                <th>Teacher</th>
-                <th>Time</th>
-                <th>Enrollment</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for c in classes %}
-            <tr>
-                <td>{{ c.class_name }}</td>
-                <td>{{ c.teacher.user.username }}</td>
-                <td>{{ c.class_time }}</td>
-                <td>
-                    {{ c.enrollments|length }}/{{ c.class_capacity }}
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-  </div>
-  <div id="add-classes" style="display:none;">
-    <table border="1" cellspacing="0" cellpadding="8">
-        <thead>
-            <tr>
-                <th>Class Name</th>
-                <th>Teacher</th>
-                <th>Time</th>
-                <th>Enrollment</th>
-                <th>Add/Drop</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for c in allClasses %}
-            <tr>
-                <td>{{ c.class_name }}</td>
-                <td>{{ c.teacher.user.username }}</td>
-                <td>{{ c.class_time }}</td>
-                <td>{{ c.enrollments|length }}/{{ c.class_capacity }}</td>
-                <td>
-                  <button onclick="toggleClass('{{ c.class_id }}')">
-                    {% if c in classes %}
-                      -
-                    {% else %}
-                      +
-                    {% endif %}
-                  </button>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+  <div id="teacher-section">
+    <p>Hello</p>
+    <div id="teaching-classes">
+      <table border="1" cellspacing="0" cellpadding="8">
+          <thead>
+              <tr>
+                  <th>Class Name</th>
+                  <th>Teacher</th>
+                  <th>Time</th>
+                  <th>Enrollment</th>
+              </tr>
+          </thead>
+          <tbody>
+              {% for c in teacherClasses %}
+                  <tr>
+                      <td>{{ c.class_name }}</td>
+                      <td>{{ c.teacher.user.username }}</td>
+                      <td>{{ c.class_time }}</td>
+                      <td>{{ c.enrollments|length }}/{{ c.class_capacity }}</td>
+                  </tr>
+              {% endfor %}
+          </tbody>
+      </table>
+    </div>
   </div>
 
   <p><a href="{{ url_for('auth.logout') }}">Log out</a></p>
 
+  <script>
+    const USER_ROLE = "{{ role }}";
+  </script>
   <script src="{{ url_for('static', filename='js/index.js') }}"></script>
 {% endblock %}
