@@ -46,6 +46,7 @@ function updateGrade(enrollmentId) {
         if (cell) {
           cell.textContent = data.grade || "N/A";
         }
+        location.reload();
       } else {
         alert(data.error || "Error updating grade.");
       }

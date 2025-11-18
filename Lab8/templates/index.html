@@ -6,7 +6,7 @@
     <!-- ===================== TEACHER DASHBOARD (NEW) ===================== -->
     <h1>Teacher Dashboard</h1>
     <hr class="line">
-    <p>Welcome, {{ current_user.username }}.</p>
+    <p style="margin-bottom: 3rem;">Welcome, {{ current_user.username }}.</p>
 
     {% for c in teacher_classes %}
       <h2>{{ c.class_name }} ({{ c.class_time }})</h2>
@@ -46,7 +46,7 @@
     </div>
 
     <div id="current-classes">
-      <table border="1" cellspacing="0" cellpadding="8">
+      <table border="1" cellspacing="0" cellpadding="8" style="margin-top: 0;">
           <thead>
               <tr>
                   <th>Class Name</th>
@@ -71,7 +71,7 @@
     </div>
 
     <div id="add-classes" style="display:none;">
-      <table border="1" cellspacing="0" cellpadding="8">
+      <table border="1" cellspacing="0" cellpadding="8" style="margin-top: 0;">
           <thead>
               <tr>
                   <th>Class Name</th>
@@ -110,7 +110,7 @@
     </div>
     {% endif %}
 
-    <button class="selector-button" style="margin-top: 1rem; background-color: rgb(195, 46, 46);">
+    <button style="font-size: 20px; margin-top: 1.5rem; background-color: rgb(195, 46, 46);">
       <a 
         style="text-decoration: none; color: white;" 
         href="{{ url_for('auth.logout') }}"
