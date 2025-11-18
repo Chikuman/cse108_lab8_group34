@@ -5,28 +5,27 @@
   {% if mode == 'teacher' %}
     <!-- ===================== TEACHER DASHBOARD (NEW) ===================== -->
     <h1>Teacher Dashboard</h1>
+    <hr class="line">
     <p>Welcome, {{ current_user.username }}.</p>
 
     {% for c in teacher_classes %}
       <h2>{{ c.class_name }} ({{ c.class_time }})</h2>
       <p>Enrollment: {{ c.enrollments|length }}/{{ c.class_capacity }}</p>
 
-      <table border="1" cellspacing="0" cellpadding="8">
+      <table border="1" cellspacing="0" cellpadding="8" style="margin-bottom: 2rem;">
         <thead>
           <tr>
-            <th>Student</th>
-            <th>Grade</th>
-            <th>Edit</th>
+            <th style="width: 70%;">Student</th>
+            <th style="width: 30%;">Grade</th>
           </tr>
         </thead>
         <tbody>
           {% for e in c.enrollments %}
           <tr>
             <td>{{ e.student.user.username }}</td>
-            <td id="grade-{{ e.enrollment_id }}">{{ e.grade or "N/A" }}</td>
-            <td>
-              <button onclick="updateGrade('{{ e.enrollment_id}}')">
-                Edit Grade
+            <td id="grade-{{ e.enrollment_id }}">
+              <button. style="background: none; color: #4652a3; cursor: pointer;" onclick="updateGrade('{{ e.enrollment_id}}')">
+                {{ e.grade or "N/A" }}
               </button>
             </td>
           </tr>
@@ -35,16 +34,15 @@
       </table>
     {% endfor %}
 
-    <p><a href="{{ url_for('auth.logout') }}">Log out</a></p>
-
   {% else %}
     <!-- ===================== STUDENT DASHBOARD (existing) ===================== -->
     <h1>Dashboard</h1>
+    <hr class="line">
     <p>Welcome, {{ current_user.username }}.</p>
 
-    <div style="margin-bottom: 20px;">
-      <button onclick="showTab('current')">Your Classes</button>
-      <button onclick="showTab('add')">Add Classes</button>
+    <div class="button-container">
+      <button class="selector-button" onclick="showTab('current')">Your Classes</button>
+      <button class="selector-button" onclick="showTab('add')">Add Classes</button>
     </div>
 
     <div id="current-classes">
@@ -91,10 +89,11 @@
                   <td>{{ c.class_time }}</td>
                   <td>{{ c.enrollments|length }}/{{ c.class_capacity }}</td>
                   <td>
+                    <div style="display: flex; justify-content: center;">
                       {% if c.enrollments|length >= c.class_capacity %}
                           <span style="color: red; font-weight: bold; margin-left: 8px;">FULL</span>
                       {% else %}
-                          <button onclick="toggleClass('{{ c.class_id }}')" style="margin-left: 8px;">
+                          <button onclick="toggleClass('{{ c.class_id }}')" class="add-drop-class">
                               {% if c in classes %}
                                   -
                               {% else %}
@@ -102,16 +101,21 @@
                               {% endif %}
                           </button>
                       {% endif %}
+                    </div>
                   </td>
               </tr>
               {% endfor %}
           </tbody>
       </table>
     </div>
+    {% endif %}
 
-    <p><a href="{{ url_for('auth.logout') }}">Log out</a></p>
-
-  {% endif %}
+    <button class="selector-button" style="margin-top: 1rem; background-color: rgb(195, 46, 46);">
+      <a 
+        style="text-decoration: none; color: white;" 
+        href="{{ url_for('auth.logout') }}"
+      >Log out</a>
+    </button>
 
   <script src="{{ url_for('static', filename='js/index.js') }}"></script>
 {% endblock %}
