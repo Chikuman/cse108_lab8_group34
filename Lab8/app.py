@@ -169,6 +169,24 @@ def create_app():
         # add mock data to database (delete app.db if mockData is updated to refresh database)
         mockData()
 
+    @app.route("/class/<int:class_id>/students")
+    @login_required
+    def class_students(class_id):
+        enrollments = Enrollment.query.filter_by(class_id=class_id).all()
+
+        results = []
+        for e in enrollments:
+            student = Student.query.get(e.student_id)
+            user = User.query.get(student.user_id)
+
+            results.append({
+                "name": user.username,
+                "grade": e.grade,
+                "enrollment_id": e.enrollment_id
+            })
+
+        return jsonify(results)
+    
     return app
 
 if __name__ == "__main__":
