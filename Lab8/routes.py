@@ -7,11 +7,11 @@ auth_bp = Blueprint("auth", __name__, url_prefix="/auth")
 
 @auth_bp.route("/login", methods=["GET", "POST"])
 def login():
-    if current_user.is_authenticated:
+    if current_user.is_authenticated and request.method == "GET":
         return redirect(url_for("index"))
 
     if request.method == "POST":
-        username = (request.form.get("username") or "").strip().lower()
+        username = (request.form.get("username") or "").strip()
         password = request.form.get("password") or ""
         remember = bool(request.form.get("remember"))
 
@@ -21,11 +21,18 @@ def login():
             user = User.query.filter_by(username=username).first()
             if user and user.check_password(password):
                 login_user(user, remember=remember)
+
+                # 🔹 NEW: admins go straight to Flask-Admin dashboard
+                if getattr(user, "is_admin", False):
+                    return redirect(url_for("admin.index"))
+
+                # students/teachers go to normal dashboard
                 return redirect(url_for("index"))
+
             flash("Invalid username or password.", "error")
 
-    # <-- always return something on GET and on failed POST
     return render_template("login.html")
+
 
 
 @auth_bp.route("/register", methods=["GET", "POST"])

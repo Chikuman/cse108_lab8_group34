@@ -1,16 +1,52 @@
 {% extends "base.html" %}
 {% block title %}Dashboard{% endblock %}
 {% block body %}
-  <h1>Dashboard</h1>
-  <p>Welcome, {{ current_user.username }}.</p>
-  <p>{{role}}</p>
 
-  <div id="student-section">
+  {% if mode == 'teacher' %}
+    <!-- ===================== TEACHER DASHBOARD (NEW) ===================== -->
+    <h1>Teacher Dashboard</h1>
+    <p>Welcome, {{ current_user.username }}.</p>
+
+    {% for c in teacher_classes %}
+      <h2>{{ c.class_name }} ({{ c.class_time }})</h2>
+      <p>Enrollment: {{ c.enrollments|length }}/{{ c.class_capacity }}</p>
+
+      <table border="1" cellspacing="0" cellpadding="8">
+        <thead>
+          <tr>
+            <th>Student</th>
+            <th>Grade</th>
+            <th>Edit</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for e in c.enrollments %}
+          <tr>
+            <td>{{ e.student.user.username }}</td>
+            <td id="grade-{{ e.enrollment_id }}">{{ e.grade or "N/A" }}</td>
+            <td>
+              <button onclick="updateGrade('{{ e.enrollment_id}}')">
+                Edit Grade
+              </button>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% endfor %}
+
+    <p><a href="{{ url_for('auth.logout') }}">Log out</a></p>
+
+  {% else %}
+    <!-- ===================== STUDENT DASHBOARD (existing) ===================== -->
+    <h1>Dashboard</h1>
+    <p>Welcome, {{ current_user.username }}.</p>
+
     <div style="margin-bottom: 20px;">
-      <button onclick="studentShowTab('current')">Your Classes</button>
-      <button onclick="studentShowTab('add')">Add Classes</button>
+      <button onclick="showTab('current')">Your Classes</button>
+      <button onclick="showTab('add')">Add Classes</button>
     </div>
-  
+
     <div id="current-classes">
       <table border="1" cellspacing="0" cellpadding="8">
           <thead>
@@ -22,7 +58,7 @@
               </tr>
           </thead>
           <tbody>
-              {% for c in studentClasses %}
+              {% for c in classes %}
               <tr>
                   <td>{{ c.class_name }}</td>
                   <td>{{ c.teacher.user.username }}</td>
@@ -68,46 +104,10 @@
           </tbody>
       </table>
     </div>
-  </div>
 
-  <div id="teacher-section">
-    <p>Hello</p>
-    <div id="teaching-classes">
-      <table border="1" cellspacing="0" cellpadding="8">
-          <thead>
-              <tr>
-                  <th>Class Name</th>
-                  <th>Teacher</th>
-                  <th>Time</th>
-                  <th>Enrollment</th>
-              </tr>
-          </thead>
-          <tbody>
-              {% for c in teacherClasses %}
-                  <tr>
-                      <td>
-                        <a href="#" onclick="loadClassDetails('{{ c.class_id }}')">
-                          {{ c.class_name }}
-                        </a>
-                      </td>
-                      <td>{{ c.teacher.user.username }}</td>
-                      <td>{{ c.class_time }}</td>
-                      <td>{{ c.enrollments|length }}/{{ c.class_capacity }}</td>
-                  </tr>
-              {% endfor %}
-          </tbody>
-      </table>
-    </div>
+    <p><a href="{{ url_for('auth.logout') }}">Log out</a></p>
 
-    <div id="class-details" style="display: block;">
-      
-    </div>
-  </div>
+  {% endif %}
 
-  <p><a href="{{ url_for('auth.logout') }}">Log out</a></p>
-
-  <script>
-    const USER_ROLE = "{{ role }}";
-  </script>
   <script src="{{ url_for('static', filename='js/index.js') }}"></script>
 {% endblock %}
