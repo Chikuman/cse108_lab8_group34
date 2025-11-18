@@ -8,10 +8,12 @@ def mockData():
         u3 = User(username="tanya", password="123456")
         u4 = User(username="lily", password="123456")
         u5 = User(username="carrie", password="123456")
-        u6 = User(username="Ms. Johnson", password="123456")
-        u7 = User(username="Ms. Smith", password="123456")
+        u6 = User(username="ahepworth", password="iamteacher")
+        u7 = User(username="smithyoo", password="iamteacher")
 
-        db.session.add_all([u1, u2, u3, u4, u5, u6, u7])
+        admin_user = User(username="admin", password="admin123", is_admin=True)
+
+        db.session.add_all([u1, u2, u3, u4, u5, u6, u7, admin_user])
         db.session.commit()
 
         s1 = Student(user_id=u1.id)

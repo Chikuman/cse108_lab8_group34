@@ -2,7 +2,7 @@
 {% block title %}Sign in{% endblock %}
 {% block body %}
   <h1>Sign in</h1>
-  <form method="POST" action="">
+  <form method="POST" action="{{ url_for('auth.login') }}">
     <label>Username
       <input type="text" name="username" required>
     </label>
