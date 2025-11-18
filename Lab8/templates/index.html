@@ -90,16 +90,15 @@
                   <td>{{ c.enrollments|length }}/{{ c.class_capacity }}</td>
                   <td>
                     <div style="display: flex; justify-content: center;">
-                      {% if c.enrollments|length >= c.class_capacity %}
-                          <span style="color: red; font-weight: bold; margin-left: 8px;">FULL</span>
+                      {% if c in classes %}
+                          <button onclick="toggleClass('{{ c.class_id }}')" class="add-drop-class">-</button>
+
                       {% else %}
-                          <button onclick="toggleClass('{{ c.class_id }}')" class="add-drop-class">
-                              {% if c in classes %}
-                                  -
-                              {% else %}
-                                  +
-                              {% endif %}
-                          </button>
+                          {% if c.enrollments|length >= c.class_capacity %}
+                              <span style="color: red; font-weight: bold;">FULL</span>
+                          {% else %}
+                              <button onclick="toggleClass('{{ c.class_id }}')" class="add-drop-class">+</button>
+                          {% endif %}
                       {% endif %}
                     </div>
                   </td>
