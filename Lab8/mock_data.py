@@ -49,18 +49,27 @@ def mockData():
             teacher_id=t2.teacher_id
         )
 
-        db.session.add_all([c1, c2, c3])
+        c4 = Class(
+            class_name="PHYS 009",
+            class_time="WF 10AM",
+            class_capacity=2,
+            teacher_id=t2.teacher_id
+        )
+
+        db.session.add_all([c1, c2, c3, c4])
         db.session.commit()
 
-        e1 = Enrollment(student_id=s1.student_id, class_id=c1.class_id, grade=90)
-        e2 = Enrollment(student_id=s2.student_id, class_id=c1.class_id, grade=75)
-        e3 = Enrollment(student_id=s1.student_id, class_id=c2.class_id, grade=88)
-        e4 = Enrollment(student_id=s3.student_id, class_id=c2.class_id, grade=63)
-        e5 = Enrollment(student_id=s4.student_id, class_id=c2.class_id, grade=70)
-        e6 = Enrollment(student_id=s2.student_id, class_id=c3.class_id, grade=94)
-        e7 = Enrollment(student_id=s4.student_id, class_id=c3.class_id, grade=98)
-        e8 = Enrollment(student_id=s5.student_id, class_id=c3.class_id, grade=77)
-        e9 = Enrollment(student_id=s3.student_id, class_id=c1.class_id, grade=89)
+        e1 = Enrollment(student_id=s1.student_id, class_id=c1.class_id, grade="90.99")
+        e2 = Enrollment(student_id=s2.student_id, class_id=c1.class_id, grade="80.88")
+        e3 = Enrollment(student_id=s1.student_id, class_id=c2.class_id, grade="70.77")
+        e4 = Enrollment(student_id=s3.student_id, class_id=c2.class_id, grade="60.66")
+        e5 = Enrollment(student_id=s4.student_id, class_id=c2.class_id, grade="50.55")
+        e6 = Enrollment(student_id=s2.student_id, class_id=c3.class_id, grade="77")
+        e7 = Enrollment(student_id=s4.student_id, class_id=c3.class_id, grade="85")
+        e8 = Enrollment(student_id=s5.student_id, class_id=c3.class_id, grade="99.99")
+        e9 = Enrollment(student_id=s3.student_id, class_id=c1.class_id, grade="72.5")
+        e10 = Enrollment(student_id=s1.student_id, class_id=c4.class_id, grade="93.23")
+        e11 = Enrollment(student_id=s2.student_id, class_id=c4.class_id, grade="90")
 
-        db.session.add_all([e1, e2, e3, e4, e5, e6, e7, e8, e9])
+        db.session.add_all([e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11])
         db.session.commit()

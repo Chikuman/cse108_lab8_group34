@@ -91,13 +91,17 @@
                   <td>{{ c.class_time }}</td>
                   <td>{{ c.enrollments|length }}/{{ c.class_capacity }}</td>
                   <td>
-                    <button onclick="toggleClass('{{ c.class_id }}')">
-                      {% if c in classes %}
-                        -
+                      {% if c.enrollments|length >= c.class_capacity %}
+                          <span style="color: red; font-weight: bold; margin-left: 8px;">FULL</span>
                       {% else %}
-                        +
+                          <button onclick="toggleClass('{{ c.class_id }}')" style="margin-left: 8px;">
+                              {% if c in classes %}
+                                  -
+                              {% else %}
+                                  +
+                              {% endif %}
+                          </button>
                       {% endif %}
-                    </button>
                   </td>
               </tr>
               {% endfor %}

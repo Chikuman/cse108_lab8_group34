@@ -1,4 +1,4 @@
-function studentShowTab(tab) {
+function showTab(tab) {
   document.getElementById('current-classes').style.display =
     tab === 'current' ? 'block' : 'none';
 
