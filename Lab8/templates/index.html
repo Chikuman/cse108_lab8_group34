@@ -5,7 +5,7 @@
   {% if mode == 'teacher' %}
     <!-- ===================== TEACHER DASHBOARD (NEW) ===================== -->
     <h1>Teacher Dashboard</h1>
-    <p>Welcome, {{ current_user.username }}.</p>
+    <p>Welcome, {{ current_user.name or current_user.username }}.</p>
 
     {% for c in teacher_classes %}
       <h2>{{ c.class_name }} ({{ c.class_time }})</h2>
@@ -22,7 +22,7 @@
         <tbody>
           {% for e in c.enrollments %}
           <tr>
-            <td>{{ e.student.user.username }}</td>
+            <td>{{ e.student.user.name or e.student.user.username }}</td>
             <td id="grade-{{ e.enrollment_id }}">{{ e.grade or "N/A" }}</td>
             <td>
               <button onclick="updateGrade('{{ e.enrollment_id}}')">
@@ -40,7 +40,7 @@
   {% else %}
     <!-- ===================== STUDENT DASHBOARD (existing) ===================== -->
     <h1>Dashboard</h1>
-    <p>Welcome, {{ current_user.username }}.</p>
+    <p>Welcome, {{ current_user.name or current_user.username }}.</p>
 
     <div style="margin-bottom: 20px;">
       <button onclick="showTab('current')">Your Classes</button>
@@ -61,7 +61,7 @@
               {% for c in classes %}
               <tr>
                   <td>{{ c.class_name }}</td>
-                  <td>{{ c.teacher.user.username }}</td>
+                  <td>{{ c.teacher.user.name or c.teacher.user.username }}</td>
                   <td>{{ c.class_time }}</td>
                   <td>
                       {{ c.enrollments|length }}/{{ c.class_capacity }}
@@ -87,7 +87,7 @@
               {% for c in allClasses %}
               <tr>
                   <td>{{ c.class_name }}</td>
-                  <td>{{ c.teacher.user.username }}</td>
+                  <td>{{ c.teacher.user.name or c.teacher.user.username }}</td>
                   <td>{{ c.class_time }}</td>
                   <td>{{ c.enrollments|length }}/{{ c.class_capacity }}</td>
                   <td>

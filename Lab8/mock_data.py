@@ -3,13 +3,13 @@ from data_structures import User, Student, Teacher, Class, Enrollment, db
 def mockData():
     if not User.query.first():
 
-        u1 = User(username="alice", password="123456")
-        u2 = User(username="bob", password="123456")
-        u3 = User(username="tanya", password="123456")
-        u4 = User(username="lily", password="123456")
-        u5 = User(username="carrie", password="123456")
-        u6 = User(username="ahepworth", password="iamteacher")
-        u7 = User(username="smithyoo", password="iamteacher")
+        u1 = User(username="alice", name='Alice Glass', password="123456")
+        u2 = User(username="bob", name='Bob Dylan',password="123456")
+        u3 = User(username="tanya",name="Tanya Haden", password="123456")
+        u4 = User(username="lily", name= "Lily Collins",password="123456")
+        u5 = User(username="carrie", name="Carrie Fisher", password="123456")
+        u6 = User(username="ahepworth", name= "Ammon Hepworth", password="iamteacher")
+        u7 = User(username="smithyoo", name= "Smith Yoon", password="iamteacher")
 
         admin_user = User(username="admin", password="admin123", is_admin=True)
 
@@ -30,21 +30,21 @@ def mockData():
 
         c1 = Class(
             class_name="CSE 108",
-            class_time="MWF 9AM",
+            class_time="Monday, Wednesday, Friday @ 9:00 AM",
             class_capacity=30,
             teacher_id=t1.teacher_id
         )
 
         c2 = Class(
             class_name="ENGR 065",
-            class_time="TTh 11AM",
+            class_time="Tuesday, Thursday @ 11:00 AM",
             class_capacity=25,
             teacher_id=t1.teacher_id
         )
 
         c3 = Class(
             class_name="MATH 144",
-            class_time="TTh 3PM",
+            class_time="Tuesday, Thursday @ 3:00 PM",
             class_capacity=25,
             teacher_id=t2.teacher_id
         )
