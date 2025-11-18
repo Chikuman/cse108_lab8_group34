@@ -51,7 +51,15 @@
                 <td>{{ c.teacher.user.username }}</td>
                 <td>{{ c.class_time }}</td>
                 <td>{{ c.enrollments|length }}/{{ c.class_capacity }}</td>
-                <td><button>+/-</button></td>
+                <td>
+                  <button onclick="toggleClass('{{ c.class_id }}')">
+                    {% if c in classes %}
+                      -
+                    {% else %}
+                      +
+                    {% endif %}
+                  </button>
+                </td>
             </tr>
             {% endfor %}
         </tbody>
